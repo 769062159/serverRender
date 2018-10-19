@@ -1,7 +1,8 @@
 import axios from 'axios';
-
-const instance=axios.create({
-    baseURL:'/'
+import secret from '../config'
+const instance = axios.create({
+    baseURL:'/',
+    params: secret
 })
 
 export default instance

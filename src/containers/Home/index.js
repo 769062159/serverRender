@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import Header from '../../components/Header';
 import { connect } from 'react-redux';
 import { getHomeList } from './store/actions';
-
+import styles from './style.css'
+import withStyles from '../../WithStyle'
 class Home extends Component {
-
 	getList() {
 		const { list } = this.props;
-		return list.map(item => <div key={item.id}>{item.title}</div>)
+		return list.map(item => <div key={item.id} className={styles.item}>{item.title}</div>)
 	}
-
+	componentWillMount(){
+		if(this.props.staticContext){
+            this.props.staticContext.css.push(styles._getCss())
+		}
+	}
 	render() {
 		return (
-			<div>
+			<div className={styles.container}>
 				{this.getList()}
-				<button onClick={()=>{alert('click1')}}>
-					click
-				</button>
 			</div>
 		)
 	}
@@ -28,11 +28,6 @@ class Home extends Component {
 	}
 }
 
-Home.loadData = (store) => {
-	// 这个函数，负责在服务器端渲染之前，把这个路由需要的数据提前加载好
-	return store.dispatch(getHomeList())
-}
-
 const mapStateToProps = state => ({
 	list: state.home.newsList
 });
@@ -42,5 +37,9 @@ const mapDispatchToProps = dispatch => ({
 		dispatch(getHomeList());
 	}
 })
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+const ExportHome= connect(mapStateToProps, mapDispatchToProps)(withStyles(Home,styles));
+ExportHome.loadData = (store) => {
+    // 这个函数，负责在服务器端渲染之前，把这个路由需要的数据提前加载好
+    return store.dispatch(getHomeList())
+}
+export default ExportHome

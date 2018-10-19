@@ -9,7 +9,6 @@ app.use(express.static('public'));
 app.use('/api',proxy('http://47.95.113.63', {
     proxyReqPathResolver: function (req) {
        return '/ssr/api'+ req.url;
-
     }
 }));
 app.get('*', function (req, res) {
@@ -24,7 +23,19 @@ app.get('*', function (req, res) {
 		}
 	})
 	Promise.all(promises).then(() => {
-		res.send(render(store, routes, req));
+		const context={
+			css:[]
+		}
+		const html=render(store, routes, req, context)
+		console.log(context.css)
+		if(context.action === 'REPLACE'){res.redirect(301,context.url)}
+		else if(context.NotFound){
+			res.status(404)
+            res.send(html);
+		}else{
+            res.send(html);
+		}
+
 	})
 });
 
