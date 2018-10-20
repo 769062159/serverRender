@@ -1,15 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import { connect } from 'react-redux';
+import {Helmet} from 'react-helmet'
 import { getTranslationList } from './store/actions';
 import {Redirect} from 'react-router-dom'
 import withStyles from '../../WithStyle'
 import styles from './style.css'
 class Translation extends Component {
 	render(){
-	    return this.props.login?
-            (<div className={styles.container}>
+	    return this.props.login?(
+            <Fragment>
+                <Helmet>
+                    <title>这是苑百琦的SSR翻译页面</title>
+                    <meta name='description' content='翻译页面-丰富多彩的资讯'/>
+                </Helmet>
+            <div className={styles.container}>
                 {this.getList()}
-            </div>)
+            </div>
+            </Fragment>)
 	    :<Redirect to='/'/>
 	}
 
